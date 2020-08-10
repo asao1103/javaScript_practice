@@ -47,8 +47,8 @@
 <body>
 <header>
 <div class="container">
-<h1>タイトル</h1>
-<h2>サブタイトル</h2>
+<h1>空き席状況をチェック</h1>
+<h2>データをもとに表示を切り替える</h2>
 </div><!-- /.container -->
 </header>
 <main>
@@ -85,10 +85,25 @@
         //ファイルの読み込み
         $.ajax({url: 'data.json', dataType: 'json'})
         .done(function(data){
-            console.log(data);
+            data.forEach(function(item, index){
+                console.log(item);if(item.crowded === 'yes') {
+                    const idName = '#' + item.id;
+                    $(idName).find('.check').addClass('crowded');
+                }
+            });
         })
+
         .fail(function(){
             window.alert('読み込みエラー');
+        });
+
+        //クリックされたら空き席状況を表示
+        $('.check').on('click', function() {
+            if($(this).hasClass('crowded')) {
+                $(this).text('席数わずか').addClass('red');
+            } else {
+                $(this).text('お席あります').addClass('green');
+            }
         });
     });
 </script>
